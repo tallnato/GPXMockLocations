@@ -2,7 +2,21 @@
 <resources>
 
     <string name="app_name">GPXMockLocations</string>
-    <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
-
+    
+    <string name="service_name">MockLocationService</string>
+    <string name="remote_service_started">remote service started</string>
+    <string name="remote_service_stopped">remote service stopped</string>
+    <string name="remote_service_label">remote service label</string>
+    <string name="remote_service_connected">remote service connected</string>
+    <string name="remote_service_disconnected">remote service disconnected</string>
+    <string name="activity_main_status">Status:</string>
+    <string name="activity_main_status_waiting">Waiting for status...</string>
+    <string name="activity_main_file">File:</string>
+    <string name="activity_main_editbox_file_hint">Click me to load file</string>
+    <string name="activity_main_mode">Run mode:</string>
+    <string name="activity_main_mode_single_run_text">Single run</string>
+    <string name="activity_main_mode_single_loop_text">Loop</string>
+    <string name="activity_main_start_text">Start</string>
+    <string name="activity_main_stop_text">Stop</string>
+    <string name="activity_main_restart_text">Restart</string>
 </resources>
