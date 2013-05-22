@@ -11,6 +11,10 @@
     <string name="remote_service_disconnected">remote service disconnected</string>
     <string name="activity_main_status">Status:</string>
     <string name="activity_main_status_waiting">Waiting for status...</string>
+    <string name="activity_main_status_binded">Binded with service</string>
+    <string name="activity_main_status_unbinded">Unbinded with service</string>
+    <string name="activity_main_status_running">Running</string>
+    <string name="activity_main_status_stopped">Stopped</string>
     <string name="activity_main_file">File:</string>
     <string name="activity_main_editbox_file_hint">Click me to load file</string>
     <string name="activity_main_mode">Run mode:</string>
@@ -19,4 +23,5 @@
     <string name="activity_main_start_text">Start</string>
     <string name="activity_main_stop_text">Stop</string>
     <string name="activity_main_restart_text">Restart</string>
+    
 </resources>
