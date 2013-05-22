@@ -12,9 +12,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    
-  android:focusable="true"
-  android:focusableInTouchMode="true" >
+	android:focusable="true"
+	android:focusableInTouchMode="true" >
 
     <TextView
         android:id="@+id/textView"
@@ -52,6 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/textView2"
         android:layout_below="@+id/textView2"
+        android:editable="false"
         android:hint="@string/activity_main_editbox_file_hint" />
 
     <TextView
@@ -78,7 +78,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/activity_main_mode_single_run_text"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:checked="true" />
 
         <RadioButton
             android:id="@+id/activity_main_mode_single_loop"

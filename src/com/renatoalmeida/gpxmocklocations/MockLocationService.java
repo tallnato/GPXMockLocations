@@ -4,6 +4,7 @@ import java.io.File;
 
 import android.app.Service;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -32,8 +33,8 @@ public class MockLocationService extends Service
 	private final Messenger mMessenger = new Messenger(new IncomingHandler());
 
 	private final boolean running = false;
-	private final boolean loop = false;
-	private final File fileToLoad = null;
+	private boolean loop = false;
+	private File fileToLoad = null;
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId)
@@ -69,7 +70,15 @@ public class MockLocationService extends Service
 			switch(msg.what) {
 
 			case MSG_START:
-				Toast.makeText(getApplicationContext(), "Start", Toast.LENGTH_SHORT).show();
+
+				Bundle b = msg.getData();
+				fileToLoad = new File(b.getString(BUNDLE_KEY_FILE));
+				//TODO Should verify if file exists? but it's internal service...
+
+				loop = !b.getBoolean(BUNDLE_KEY_MODE);
+
+				Toast.makeText(getApplicationContext(), "Start " + fileToLoad + " " + loop, Toast.LENGTH_SHORT).show();
+
 				break;
 			case MSG_STOP:
 				Toast.makeText(getApplicationContext(), "Stop", Toast.LENGTH_SHORT).show();

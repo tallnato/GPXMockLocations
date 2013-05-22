@@ -1,6 +1,9 @@
 package com.renatoalmeida.gpxmocklocations;
 
+import java.io.File;
+
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -14,11 +17,19 @@ import android.os.RemoteException;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.ipaulpro.afilechooser.utils.FileUtils;
 
 public class MainActivity extends Activity
 {
 	private static final String TAG = MainActivity.class.getSimpleName();
+
+	private static final int REQUEST_CODE = 1234;
+	private static final String CHOOSER_TITLE = "Select a GPX file";
 
 	/**
 	 * Messenger for communicating with service.
@@ -44,14 +55,25 @@ public class MainActivity extends Activity
 		Button start = (Button) findViewById(R.id.activity_main_start);
 		Button stop = (Button) findViewById(R.id.activity_main_stop);
 		Button restart = (Button) findViewById(R.id.activity_main_restart);
+		final EditText edit = (EditText) findViewById(R.id.activity_main_editbox_file);
+		final RadioButton rb = (RadioButton) findViewById(R.id.activity_main_mode_single_run);
 
 		start.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v)
 			{
-				Message msg = Message.obtain(null, MockLocationService.MSG_START, 0, 0);
+				if(edit.getText().length() == 0) {
+					Toast.makeText(getApplicationContext(), R.string.activity_main_choose_no_file, Toast.LENGTH_LONG).show();
+					return;
+				}
 
+				Message msg = Message.obtain(null, MockLocationService.MSG_START, 0, 0);
+				Bundle b = new Bundle();
+				b.putBoolean(MockLocationService.BUNDLE_KEY_MODE, rb.isChecked());
+				b.putString(MockLocationService.BUNDLE_KEY_FILE, edit.getText().toString());
+
+				msg.setData(b);
 				try {
 					mService.send(msg);
 				} catch (RemoteException e) {
@@ -89,6 +111,52 @@ public class MainActivity extends Activity
 				}
 			}
 		});
+
+		edit.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v)
+			{
+				Intent target = FileUtils.createGetContentIntent();
+				Intent intent = Intent.createChooser(target, CHOOSER_TITLE);
+				try {
+					startActivityForResult(intent, REQUEST_CODE);
+				} catch (ActivityNotFoundException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	{
+		switch(requestCode) {
+		case REQUEST_CODE:
+			if(resultCode == RESULT_OK) {
+				// Create a File from this Uri
+				File file = FileUtils.getFile(data.getData());
+
+				if(!file.exists()) {
+					Toast.makeText(getApplicationContext(), R.string.activity_main_choose_file_inexistent, Toast.LENGTH_LONG).show();
+					return;
+				}
+
+				if(!file.canRead()) {
+					Toast.makeText(getApplicationContext(), R.string.activity_main_choose_file_cannot_read, Toast.LENGTH_LONG).show();
+					return;
+				}
+
+				String filenameArray[] = file.getName().split("\\.");
+				if(!filenameArray[filenameArray.length - 1].equals("gpx")) {
+					Toast.makeText(getApplicationContext(), R.string.activity_main_choose_file_not_gpx, Toast.LENGTH_LONG).show();
+					return;
+				}
+
+				EditText edit = (EditText) findViewById(R.id.activity_main_editbox_file);
+				edit.setText(file.getAbsolutePath());
+			}
+		}
 	}
 
 	@Override

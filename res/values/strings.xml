@@ -16,7 +16,7 @@
     <string name="activity_main_status_running">Running</string>
     <string name="activity_main_status_stopped">Stopped</string>
     <string name="activity_main_file">File:</string>
-    <string name="activity_main_editbox_file_hint">Click me to load file</string>
+    <string name="activity_main_editbox_file_hint">Touch me to load file</string>
     <string name="activity_main_mode">Run mode:</string>
     <string name="activity_main_mode_single_run_text">Single run</string>
     <string name="activity_main_mode_single_loop_text">Loop</string>
@@ -24,4 +24,10 @@
     <string name="activity_main_stop_text">Stop</string>
     <string name="activity_main_restart_text">Restart</string>
     
+    <string name="activity_main_choose_file">Choose a gpx file</string>
+    <string name="activity_main_choose_file_cannot_read">Can read file...</string>
+    <string name="activity_main_choose_file_inexistent">File inexistent...</string>
+    <string name="activity_main_choose_file_not_gpx">Not a \'.gpx\' file...</string>
+    
+    <string name="activity_main_choose_no_file">No file specified</string>
 </resources>

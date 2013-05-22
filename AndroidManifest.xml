@@ -7,6 +7,8 @@
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="16" />
+    
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -28,7 +30,19 @@
                 android:exported="false"
                 android:label="@string/service_name"
                 android:process=":mocklocationservice"/>
-        
+        <activity
+		    android:name="com.ipaulpro.afilechooser.FileChooserActivity"
+		    android:icon="@drawable/ic_launcher"
+		    android:label="@string/activity_main_choose_file" >
+		        <intent-filter>
+		            <action android:name="android.intent.action.GET_CONTENT" />
+		
+		            <category android:name="android.intent.category.DEFAULT" />
+		            <category android:name="android.intent.category.OPENABLE" />
+		
+		            <data android:mimeType="*/*" />
+		        </intent-filter>
+		    </activity>
     </application>
 	
 </manifest>
