@@ -14,8 +14,10 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -44,6 +46,9 @@ public class MainActivity extends Activity
 	private final Messenger mMessenger = new Messenger(new IncomingHandler());
 
 	private TextView status;
+	private EditText edit;
+	private RadioButton singleRun;
+	private RadioButton loop;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -55,8 +60,9 @@ public class MainActivity extends Activity
 		Button start = (Button) findViewById(R.id.activity_main_start);
 		Button stop = (Button) findViewById(R.id.activity_main_stop);
 		Button restart = (Button) findViewById(R.id.activity_main_restart);
-		final EditText edit = (EditText) findViewById(R.id.activity_main_editbox_file);
-		final RadioButton rb = (RadioButton) findViewById(R.id.activity_main_mode_single_run);
+		edit = (EditText) findViewById(R.id.activity_main_editbox_file);
+		singleRun = (RadioButton) findViewById(R.id.activity_main_mode_single_run);
+		loop = (RadioButton) findViewById(R.id.activity_main_mode_single_loop);
 
 		start.setOnClickListener(new OnClickListener() {
 
@@ -70,7 +76,7 @@ public class MainActivity extends Activity
 
 				Message msg = Message.obtain(null, MockLocationService.MSG_START, 0, 0);
 				Bundle b = new Bundle();
-				b.putBoolean(MockLocationService.BUNDLE_KEY_MODE, rb.isChecked());
+				b.putBoolean(MockLocationService.BUNDLE_KEY_MODE, singleRun.isChecked());
 				b.putString(MockLocationService.BUNDLE_KEY_FILE, edit.getText().toString());
 
 				msg.setData(b);
@@ -112,18 +118,24 @@ public class MainActivity extends Activity
 			}
 		});
 
-		edit.setOnClickListener(new OnClickListener() {
+		edit.setOnTouchListener(new OnTouchListener() {
 
 			@Override
-			public void onClick(View v)
+			public boolean onTouch(View v, MotionEvent event)
 			{
-				Intent target = FileUtils.createGetContentIntent();
-				Intent intent = Intent.createChooser(target, CHOOSER_TITLE);
-				try {
-					startActivityForResult(intent, REQUEST_CODE);
-				} catch (ActivityNotFoundException e) {
-					e.printStackTrace();
+				if(event.getAction() == MotionEvent.ACTION_UP) {
+					Intent target = FileUtils.createGetContentIntent();
+					Intent intent = Intent.createChooser(target, CHOOSER_TITLE);
+					try {
+						startActivityForResult(intent, REQUEST_CODE);
+					} catch (ActivityNotFoundException e) {
+						e.printStackTrace();
+					}
+
+					return true;
 				}
+
+				return false;
 			}
 		});
 	}
@@ -198,6 +210,16 @@ public class MainActivity extends Activity
 			case MockLocationService.MSG_GET_STATE:
 
 				status.setText(msg.arg1);
+				Bundle b = msg.getData();
+
+				String file = b.getString(MockLocationService.BUNDLE_KEY_FILE);
+				if(file != null)
+					edit.setText(file);
+
+				if(b.getBoolean(MockLocationService.BUNDLE_KEY_MODE, true))
+					singleRun.setChecked(true);
+				else
+					loop.setChecked(true);
 
 				break;
 			default:
