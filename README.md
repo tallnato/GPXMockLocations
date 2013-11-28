@@ -2,6 +2,7 @@ GPXMockLocations
 ================
 
 This repo is currently not very actively developed :(
+
 This app allows to mock GPS locations from a GPX file in and Android device
 
 
